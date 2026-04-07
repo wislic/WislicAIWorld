@@ -648,8 +648,38 @@ function buildUI() {
   // Build reports panel
   renderReportCards();
 
+  // Build commodity report cards in assets panel
+  buildCommodityReportCards();
+
   // Rebuild search index with reports data
   searchIndex = buildSearchIndex();
+}
+
+/* ── Commodity report cards in assets panel ── */
+function buildCommodityReportCards() {
+  const container = document.getElementById('commodityReportCards');
+  if (!container) return;
+  container.innerHTML = '';
+  const commodityReports = reports.filter(r => r.assetClass === 'commodity');
+  const accentCycle = ['ca-amber', 'ca-cyan', 'ca-green', 'ca-purple'];
+  commodityReports.forEach((report, i) => {
+    const cat = CATEGORIES[report.category] || CATEGORIES.other;
+    const accent = accentCycle[i % accentCycle.length];
+    const card = document.createElement('div');
+    card.className = 'card';
+    card.innerHTML = `
+      <div class="card-accent ${accent}"></div>
+      <div class="card-top">
+        <span class="card-cat">${cat.label} · 商品</span>
+        <span class="card-date">${report.date}</span>
+      </div>
+      <h3>${report.title}</h3>
+      <p>点击查看完整研究报告</p>
+      <div class="card-tags"><span class="card-tag">大宗商品</span><span class="card-tag">${cat.label}</span></div>
+    `;
+    card.onclick = () => openReport(report);
+    container.appendChild(card);
+  });
 }
 
 /* ── Nav dropdown with reports grouped by date ── */
