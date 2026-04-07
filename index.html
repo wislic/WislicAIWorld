@@ -198,6 +198,16 @@ a{color:inherit;text-decoration:none}
 .footer{border-top:1px solid var(--bd);padding:28px;text-align:center;margin-top:40px}
 .footer p{font-family:var(--mono);font-size:11px;color:var(--t3);letter-spacing:.5px}
 
+/* ── Light theme specific adjustments ── */
+[data-theme="light"] .card{border-color:var(--bd);box-shadow:0 1px 3px rgba(0,0,0,.04)}
+[data-theme="light"] .ticker{background:var(--bg2);box-shadow:0 1px 3px rgba(0,0,0,.04)}
+[data-theme="light"] .logo-mark svg rect:first-child{fill:var(--acc)}
+[data-theme="light"] .dd-date{background:var(--bg3)}
+[data-theme="light"] .search-wrap input{background:var(--bg);border-color:var(--bd)}
+[data-theme="light"] .search-kbd{background:var(--bg);border-color:var(--bd)}
+[data-theme="light"] .nav-btn:hover{background:rgba(196,138,26,.04)}
+[data-theme="light"] ::selection{background:rgba(196,138,26,.2)}
+
 /* ═══ Responsive ═══ */
 @media(max-width:860px){
   .nav-inner{overflow-x:auto;scrollbar-width:none}
