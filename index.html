@@ -753,15 +753,148 @@ function closeViewer() {
   document.getElementById('mainContent').style.display = '';
 }
 
-/* ── Search ── */
-function handleSearch(val) {
-  // If on reports panel, filter dynamically
-  if (document.getElementById('p-reports').classList.contains('on')) {
-    renderReportCards();
-  }
-  // Also filter nav dropdown
-  buildNavDropdown();
+/* ── Full-Site Search ── */
+function buildSearchIndex() {
+  const index = [];
+
+  // 1. Panels (navigable sections)
+  const panels = [
+    { id: 'home', label: '首页', keywords: '首页 主页 概览 dashboard' },
+    { id: 'macro', label: '宏观研究', keywords: '宏观 经济 周期 政策 GDP PPI CPI PMI 基钦 朱格拉 库兹涅茨 利率 货币 财政 中国 美国 全球' },
+    { id: 'geoint', label: '地缘情报', keywords: '地缘 情报 美伊 中美 俄乌 战争 冲突 风险 Flash 预警 中东 能源 台海' },
+    { id: 'market', label: '市场策略', keywords: '市场 策略 利率债 信用债 转债 权益 配置 行业 轮动 利差 跨资产' },
+    { id: 'risk', label: '风控系统', keywords: '风控 风险 VaR CVaR 压力测试 止损 遗憾矩阵 回撤 限额' },
+    { id: 'reports', label: '研报中心', keywords: '研报 报告 日报 速览 专题 研究' },
+    { id: 'system', label: '体系管理', keywords: '体系 架构 版本 提示词 Brier 评估 v5.0' },
+  ];
+  panels.forEach(p => index.push({ type: 'panel', id: p.id, title: p.label, keywords: p.keywords, action: () => showPanel(p.id) }));
+
+  // 2. All static cards (scrape h3 + p from each panel)
+  document.querySelectorAll('.panel').forEach(panel => {
+    const panelId = panel.id.replace('p-', '');
+    panel.querySelectorAll('.card, .feat-main, .feat-side .card').forEach(card => {
+      const h3 = card.querySelector('h3');
+      const p = card.querySelector('p');
+      if (h3) {
+        index.push({
+          type: 'card',
+          title: h3.textContent.trim(),
+          desc: p ? p.textContent.trim() : '',
+          keywords: (h3.textContent + ' ' + (p ? p.textContent : '')),
+          panelId,
+          action: () => showPanel(panelId)
+        });
+      }
+    });
+  });
+
+  // 3. Reports from loaded data
+  reports.forEach(r => {
+    const cat = CATEGORIES[r.category] || CATEGORIES.other;
+    index.push({
+      type: 'report',
+      title: r.title,
+      keywords: r.title + ' ' + cat.label + ' ' + r.date,
+      date: r.date,
+      catLabel: cat.label,
+      action: () => openReport(r)
+    });
+  });
+
+  return index;
 }
+
+let searchIndex = [];
+
+function handleSearch(val) {
+  const container = document.getElementById('searchResults');
+  const query = (val || '').trim().toLowerCase();
+
+  // Rebuild index if empty (after reports load)
+  if (searchIndex.length === 0) searchIndex = buildSearchIndex();
+
+  if (!query) {
+    container.classList.remove('open');
+    container.innerHTML = '';
+    // Also update reports panel if active
+    if (document.getElementById('p-reports').classList.contains('on')) renderReportCards();
+    return;
+  }
+
+  // Split query into tokens for multi-keyword matching
+  const tokens = query.split(/\s+/).filter(Boolean);
+  const results = searchIndex.filter(item => {
+    const hay = (item.title + ' ' + (item.keywords || '') + ' ' + (item.desc || '')).toLowerCase();
+    return tokens.every(t => hay.includes(t));
+  });
+
+  // Group results by type
+  const groups = { panel: [], card: [], report: [] };
+  results.forEach(r => { if (groups[r.type]) groups[r.type].push(r); });
+
+  let html = '';
+
+  if (groups.panel.length) {
+    html += `<div class="sr-group"><div class="sr-group-label">导航</div>`;
+    groups.panel.forEach(r => {
+      html += `<div class="sr-item" data-idx="${searchIndex.indexOf(r)}"><span class="sr-badge sr-badge-panel">页面</span><span class="sr-text">${hl(r.title, tokens)}</span><span class="sr-hint">→ 跳转</span></div>`;
+    });
+    html += `</div>`;
+  }
+
+  if (groups.card.length) {
+    html += `<div class="sr-group"><div class="sr-group-label">内容卡片</div>`;
+    groups.card.slice(0, 8).forEach(r => {
+      html += `<div class="sr-item" data-idx="${searchIndex.indexOf(r)}"><span class="sr-badge sr-badge-card">卡片</span><span class="sr-text">${hl(r.title, tokens)}</span><span class="sr-hint">${r.panelId}</span></div>`;
+    });
+    html += `</div>`;
+  }
+
+  if (groups.report.length) {
+    html += `<div class="sr-group"><div class="sr-group-label">研报</div>`;
+    groups.report.slice(0, 10).forEach(r => {
+      html += `<div class="sr-item" data-idx="${searchIndex.indexOf(r)}"><span class="sr-badge sr-badge-report">${r.catLabel}</span><span class="sr-text">${hl(r.title, tokens)}</span><span class="sr-hint">${r.date}</span></div>`;
+    });
+    html += `</div>`;
+  }
+
+  if (!html) html = `<div class="sr-empty">未找到与「${escHtml(val)}」相关的内容</div>`;
+
+  container.innerHTML = html;
+  container.classList.add('open');
+
+  // Bind click events
+  container.querySelectorAll('.sr-item').forEach(el => {
+    el.addEventListener('click', () => {
+      const idx = parseInt(el.dataset.idx);
+      if (searchIndex[idx]) searchIndex[idx].action();
+      container.classList.remove('open');
+      document.getElementById('searchInput').blur();
+    });
+  });
+
+  // Also filter reports panel if active
+  if (document.getElementById('p-reports').classList.contains('on')) renderReportCards();
+}
+
+function hl(text, tokens) {
+  let s = escHtml(text);
+  tokens.forEach(t => {
+    const re = new RegExp('(' + t.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + ')', 'gi');
+    s = s.replace(re, '<span style="color:var(--acc);font-weight:600">$1</span>');
+  });
+  return s;
+}
+
+function escHtml(s) { return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+// Close search results on outside click
+document.addEventListener('click', e => {
+  const wrap = document.querySelector('.search-wrap');
+  if (!wrap.contains(e.target)) {
+    document.getElementById('searchResults').classList.remove('open');
+  }
+});
 
 /* ── Clock ── */
 function updateClock() {
