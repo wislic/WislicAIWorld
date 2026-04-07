@@ -838,6 +838,11 @@ function filterAssets(sub, el) {
   document.querySelectorAll('.asset-card').forEach(card => {
     card.style.display = (sub === 'all' || card.dataset.asset === sub) ? '' : 'none';
   });
+  // Show commodity research reports when commodity or all is selected
+  const comSection = document.getElementById('commodityReportsSection');
+  if (comSection) {
+    comSection.style.display = (sub === 'commodity' || sub === 'all') ? '' : 'none';
+  }
 }
 
 /* ── Open report in viewer ── */
