@@ -525,6 +525,26 @@ let reports = [];
 let activeFile = null;
 let currentFilter = 'all';
 
+/* ── Theme ── */
+function getTheme() {
+  return localStorage.getItem('wislic-theme') || 'dark';
+}
+
+function applyTheme(theme) {
+  document.documentElement.setAttribute('data-theme', theme);
+  localStorage.setItem('wislic-theme', theme);
+  // Toggle icons
+  document.getElementById('themeIcon-moon').style.display = theme === 'dark' ? '' : 'none';
+  document.getElementById('themeIcon-sun').style.display = theme === 'light' ? '' : 'none';
+}
+
+function toggleTheme() {
+  applyTheme(getTheme() === 'dark' ? 'light' : 'dark');
+}
+
+// Apply saved theme on load
+applyTheme(getTheme());
+
 /* ── Load Reports ── */
 async function loadReports() {
   try {
