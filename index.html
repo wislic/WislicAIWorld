@@ -1336,36 +1336,68 @@ function calGetMonthRange() {
   return { from, to };
 }
 
-// ── Fetch from Finnhub Economic Calendar ──
-async function fetchFinnhubCalendar(from, to) {
+// ── Fetch from Trading Economics (free guest API) ──
+async function fetchTradingEconomicsCalendar(from, to) {
   try {
-    const url = `https://finnhub.io/api/v1/calendar/economic?from=${calDateStr(from)}&to=${calDateStr(to)}&token=${CAL_CONFIG.finnhubKey}`;
+    const url = `https://api.tradingeconomics.com/calendar?c=guest:guest&f=json&d1=${calDateStr(from)}&d2=${calDateStr(to)}`;
     const res = await fetch(url);
-    if (!res.ok) throw new Error('Finnhub API error: ' + res.status);
+    if (!res.ok) throw new Error('Trading Economics API error: ' + res.status);
     const data = await res.json();
-    const events = (data.economicCalendar || []).map(e => {
-      const cc = mapCountryCode(e.country || '');
+    if (!Array.isArray(data)) return [];
+
+    const events = data.map(e => {
+      const cc = mapCountryCode(e.Country || '');
       if (!cc) return null;
+      const dateTime = e.Date || '';
+      const datePart = dateTime.split('T')[0] || '';
+      const timePart = dateTime.split('T')[1]?.substring(0, 5) || '';
+
       return {
-        id: e.event + e.time,
-        date: e.time ? e.time.split('T')[0] : '',
-        time: e.time ? e.time.split('T')[1]?.substring(0,5) || '' : '',
+        id: (e.CalendarId || '') + '_' + datePart,
+        date: datePart,
+        time: timePart,
         country: cc,
-        title: e.event || '',
-        impact: e.impact === 'high' ? 3 : e.impact === 'medium' ? 2 : 1,
-        actual: e.actual !== null && e.actual !== undefined ? String(e.actual) : '--',
-        forecast: e.estimate !== null && e.estimate !== undefined ? String(e.estimate) : '--',
-        previous: e.prev !== null && e.prev !== undefined ? String(e.prev) : '--',
-        unit: e.unit || '',
-        type: classifyEventType(e.event),
-        source: 'finnhub'
+        title: e.Event || e.Category || '',
+        impact: e.Importance === 3 ? 3 : e.Importance === 2 ? 2 : 1,
+        actual: (e.Actual != null && e.Actual !== '') ? String(e.Actual) : '--',
+        forecast: (e.Forecast != null && e.Forecast !== '') ? String(e.Forecast) : '--',
+        previous: (e.Previous != null && e.Previous !== '') ? String(e.Previous) : '--',
+        unit: e.Unit || '',
+        type: classifyEventType(e.Event || e.Category || ''),
+        source: 'tradingeconomics',
+        category: e.Category || ''
       };
     }).filter(Boolean);
     return events;
   } catch (err) {
-    console.warn('Finnhub fetch failed:', err);
+    console.warn('Trading Economics fetch failed:', err);
     return [];
   }
+}
+
+// ── Fallback: Finnhub (if TE fails) ──
+async function fetchFinnhubCalendar(from, to) {
+  try {
+    const url = `https://finnhub.io/api/v1/calendar/economic?from=${calDateStr(from)}&to=${calDateStr(to)}&token=${CAL_CONFIG.finnhubKey}`;
+    const res = await fetch(url);
+    if (!res.ok) return [];
+    const data = await res.json();
+    return (data.economicCalendar || []).map(e => {
+      const cc = mapCountryCode(e.country || '');
+      if (!cc) return null;
+      return {
+        id: (e.event || '') + (e.time || ''),
+        date: e.time ? e.time.split('T')[0] : '',
+        time: e.time ? e.time.split('T')[1]?.substring(0,5) || '' : '',
+        country: cc, title: e.event || '',
+        impact: e.impact === 'high' ? 3 : e.impact === 'medium' ? 2 : 1,
+        actual: e.actual != null ? String(e.actual) : '--',
+        forecast: e.estimate != null ? String(e.estimate) : '--',
+        previous: e.prev != null ? String(e.prev) : '--',
+        unit: e.unit || '', type: classifyEventType(e.event), source: 'finnhub'
+      };
+    }).filter(Boolean);
+  } catch { return []; }
 }
 
 // ── Fallback: static known major events ──
