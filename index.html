@@ -770,17 +770,38 @@ function filterReports(cat, el) {
 }
 
 /* ── Panel switching ── */
-function showPanel(id) {
+function showPanel(id, sub) {
   closeViewer();
   document.querySelectorAll('.panel').forEach(p => p.classList.remove('on'));
   const panel = document.getElementById('p-' + id);
   if (panel) panel.classList.add('on');
 
   document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
-  const map = { home: 0, macro: 1, geoint: 2, market: 3, risk: 4, reports: 5, system: 6 };
+  const map = { home: 0, macro: 1, geoint: 2, assets: 3, market: 4, risk: 5, reports: 6, system: 7 };
   if (map[id] !== undefined) document.querySelectorAll('.nav-btn')[map[id]].classList.add('active');
 
-  document.getElementById('mainContent').scrollTo({ top: 0, behavior: 'smooth' });
+  // If assets panel with sub-filter
+  if (id === 'assets' && sub) {
+    const btn = document.querySelector(`.asset-filter-btn[data-sub="${sub}"]`);
+    if (btn) filterAssets(sub, btn);
+  }
+
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+/* ── Asset sub-filter ── */
+function filterAssets(sub, el) {
+  document.querySelectorAll('.asset-filter-btn').forEach(b => {
+    b.style.borderColor = '';
+    b.style.color = '';
+  });
+  if (el) {
+    el.style.borderColor = 'var(--acc-border)';
+    el.style.color = 'var(--acc)';
+  }
+  document.querySelectorAll('.asset-card').forEach(card => {
+    card.style.display = (sub === 'all' || card.dataset.asset === sub) ? '' : 'none';
+  });
 }
 
 /* ── Open report in viewer ── */
