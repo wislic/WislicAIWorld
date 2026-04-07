@@ -586,15 +586,15 @@ function buildNavDropdown() {
 
   // Category sub-items first
   const cats = [
-    { label: '宏观日报', cat: 'daily', icon: '▤' },
-    { label: '盘中速览', cat: 'flash', icon: '▥' },
-    { label: '专题研究', cat: 'deep', icon: '▦' },
+    { label: '宏观日报', cat: 'daily' },
+    { label: '盘中速览', cat: 'flash' },
+    { label: '专题研究', cat: 'deep' },
   ];
   cats.forEach(c => {
     const count = reports.filter(r => r.category === c.cat).length;
     const el = document.createElement('div');
     el.className = 'dd-item-static';
-    el.innerHTML = `<span class="dd-icon">${c.icon}</span>${c.label}<span class="dd-label-tag">${count}</span>`;
+    el.innerHTML = `${c.label}<span class="dd-label-tag">${count}</span>`;
     el.onclick = () => { showPanel('reports'); filterReports(c.cat, document.querySelector(`[data-filter="${c.cat}"]`)); };
     container.appendChild(el);
   });
