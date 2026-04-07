@@ -18,7 +18,6 @@
     --radius-md: 10px;
     --radius-lg: 14px;
     --transition: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-    --sidebar-w: 280px;
   }
 
   /* ── Dark Theme ── */
@@ -165,7 +164,7 @@
     border: 1px solid var(--border-subtle);
     border-radius: var(--radius-md);
     padding: 6px 14px;
-    width: 340px;
+    width: 420px;
     max-width: 100%;
     transition: border-color var(--transition), box-shadow var(--transition);
   }
@@ -241,126 +240,129 @@
   }
 
   /* ═══════════════════════════════════════════
-     MAIN LAYOUT
+     TOP NAV BAR — Horizontal Category Tabs
      ═══════════════════════════════════════════ */
-  .app-layout {
-    display: flex;
-    height: calc(100vh - 52px);
-  }
-
-  /* ═══════════════════════════════════════════
-     SIDEBAR
-     ═══════════════════════════════════════════ */
-  .sidebar {
-    width: var(--sidebar-w);
-    min-width: var(--sidebar-w);
+  .topnav {
     background: var(--bg-surface);
-    border-right: 1px solid var(--border-subtle);
-    display: flex;
-    flex-direction: column;
-    transition: background var(--transition), border-color var(--transition);
-    overflow: hidden;
-  }
-
-  .sidebar-nav {
-    padding: 16px 12px 8px;
-    flex-shrink: 0;
-  }
-
-  .nav-label {
-    font-family: var(--font-mono);
-    font-size: 10px;
-    font-weight: 600;
-    color: var(--text-tertiary);
-    text-transform: uppercase;
-    letter-spacing: 1.2px;
-    padding: 0 8px;
-    margin-bottom: 6px;
-  }
-
-  .nav-item {
+    border-bottom: 1px solid var(--border-subtle);
     display: flex;
     align-items: center;
-    gap: 10px;
-    padding: 9px 10px;
-    border-radius: var(--radius-sm);
+    padding: 0 20px;
+    gap: 2px;
+    position: relative;
+    z-index: 40;
+    transition: background var(--transition), border-color var(--transition);
+  }
+
+  .topnav-item {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    padding: 10px 14px;
     cursor: pointer;
-    transition: all var(--transition);
     font-size: 13px;
     font-weight: 500;
     color: var(--text-secondary);
-    border: 1px solid transparent;
-    margin-bottom: 2px;
+    border-bottom: 2px solid transparent;
+    transition: all var(--transition);
+    user-select: none;
   }
 
-  .nav-item:hover {
-    background: var(--bg-hover);
+  .topnav-item:hover {
     color: var(--text-primary);
+    background: var(--bg-hover);
   }
 
-  .nav-item.active {
-    background: var(--accent-primary-bg);
+  .topnav-item.active {
     color: var(--accent-primary);
-    border-color: var(--accent-primary-border);
+    border-bottom-color: var(--accent-primary);
   }
 
-  .nav-icon {
-    width: 22px;
-    height: 22px;
-    border-radius: 5px;
+  .topnav-icon {
+    width: 20px;
+    height: 20px;
+    border-radius: 4px;
     display: flex;
     align-items: center;
     justify-content: center;
     font-family: var(--font-mono);
-    font-size: 10px;
+    font-size: 9px;
     font-weight: 600;
     flex-shrink: 0;
   }
 
-  .nav-icon.ic-all { background: var(--accent-blue-bg); color: var(--accent-blue); }
-  .nav-icon.ic-daily { background: var(--accent-primary-bg); color: var(--accent-primary); }
-  .nav-icon.ic-flash { background: var(--accent-cyan-bg); color: var(--accent-cyan); }
-  .nav-icon.ic-deep { background: var(--accent-purple-bg); color: var(--accent-purple); }
-  .nav-icon.ic-other { background: var(--accent-green-bg); color: var(--accent-green); }
+  .topnav-icon.ic-all { background: var(--accent-blue-bg); color: var(--accent-blue); }
+  .topnav-icon.ic-daily { background: var(--accent-primary-bg); color: var(--accent-primary); }
+  .topnav-icon.ic-flash { background: var(--accent-cyan-bg); color: var(--accent-cyan); }
+  .topnav-icon.ic-deep { background: var(--accent-purple-bg); color: var(--accent-purple); }
+  .topnav-icon.ic-other { background: var(--accent-green-bg); color: var(--accent-green); }
 
-  .nav-count {
-    margin-left: auto;
+  .topnav-count {
     font-family: var(--font-mono);
-    font-size: 11px;
+    font-size: 10px;
     color: var(--text-tertiary);
     background: var(--bg-base);
-    padding: 1px 7px;
-    border-radius: 10px;
-    min-width: 22px;
+    padding: 1px 6px;
+    border-radius: 8px;
+    min-width: 20px;
     text-align: center;
   }
 
-  /* Report List */
-  .report-list {
-    flex: 1;
+  .topnav-arrow {
+    font-size: 8px;
+    color: var(--text-tertiary);
+    margin-left: 2px;
+    transition: transform var(--transition);
+  }
+
+  .topnav-item.open .topnav-arrow {
+    transform: rotate(180deg);
+  }
+
+  /* ── Dropdown Menu ── */
+  .dropdown {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    min-width: 320px;
+    max-height: 420px;
     overflow-y: auto;
-    padding: 4px 12px 16px;
+    background: var(--bg-elevated);
+    border: 1px solid var(--border-default);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-lg);
+    padding: 6px;
+    display: none;
+    z-index: 100;
+    margin-top: 2px;
     scrollbar-width: thin;
     scrollbar-color: var(--border-default) transparent;
   }
 
-  .date-group { margin-top: 14px; }
-  .date-group:first-child { margin-top: 4px; }
+  .topnav-item.open .dropdown {
+    display: block;
+    animation: dropIn 0.15s ease;
+  }
 
-  .date-label {
+  @keyframes dropIn {
+    from { opacity: 0; transform: translateY(-4px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .dropdown-date {
     font-family: var(--font-mono);
     font-size: 10px;
     font-weight: 500;
     color: var(--text-tertiary);
-    padding: 4px 8px;
-    margin-bottom: 3px;
+    padding: 8px 10px 4px;
     position: sticky;
     top: 0;
-    background: var(--bg-surface);
+    background: var(--bg-elevated);
     z-index: 1;
   }
 
-  .report-item {
+  .dropdown-item {
     display: flex;
     align-items: center;
     gap: 8px;
@@ -370,21 +372,19 @@
     transition: all var(--transition);
     font-size: 12.5px;
     color: var(--text-secondary);
-    border: 1px solid transparent;
   }
 
-  .report-item:hover {
+  .dropdown-item:hover {
     background: var(--bg-hover);
     color: var(--text-primary);
   }
 
-  .report-item.active {
+  .dropdown-item.active {
     background: var(--accent-primary-bg);
     color: var(--accent-primary);
-    border-color: var(--accent-primary-border);
   }
 
-  .report-tag {
+  .dropdown-tag {
     font-family: var(--font-mono);
     font-size: 9px;
     font-weight: 600;
@@ -400,7 +400,28 @@
   .rt-deep { background: var(--accent-purple-bg); color: var(--accent-purple); }
   .rt-other { background: var(--accent-green-bg); color: var(--accent-green); }
 
-  .report-title { flex: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .dropdown-title {
+    flex: 1;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .dropdown-empty {
+    padding: 20px 16px;
+    text-align: center;
+    color: var(--text-tertiary);
+    font-size: 12px;
+  }
+
+  /* ═══════════════════════════════════════════
+     MAIN LAYOUT (no sidebar)
+     ═══════════════════════════════════════════ */
+  .app-layout {
+    display: flex;
+    flex-direction: column;
+    height: calc(100vh - 52px);
+  }
 
   /* ═══════════════════════════════════════════
      CONTENT AREA
@@ -421,7 +442,7 @@
     border-bottom: 1px solid var(--border-subtle);
     display: flex;
     align-items: center;
-    padding: 0 16px;
+    padding: 0 20px;
     gap: 10px;
     flex-shrink: 0;
     transition: background var(--transition), border-color var(--transition);
@@ -592,26 +613,6 @@
   .guide-card pre .st { color: var(--accent-green); }
 
   /* ═══════════════════════════════════════════
-     MOBILE SIDEBAR TOGGLE
-     ═══════════════════════════════════════════ */
-  .mobile-toggle {
-    display: none;
-    width: 36px;
-    height: 36px;
-    border-radius: var(--radius-sm);
-    border: 1px solid var(--border-subtle);
-    background: var(--bg-base);
-    color: var(--text-secondary);
-    cursor: pointer;
-    align-items: center;
-    justify-content: center;
-    font-size: 18px;
-    transition: all var(--transition);
-  }
-
-  .mobile-toggle:hover { background: var(--bg-hover); }
-
-  /* ═══════════════════════════════════════════
      SCROLLBAR
      ═══════════════════════════════════════════ */
   ::-webkit-scrollbar { width: 5px; }
@@ -623,19 +624,13 @@
      RESPONSIVE
      ═══════════════════════════════════════════ */
   @media (max-width: 860px) {
-    .sidebar {
-      position: fixed;
-      top: 52px;
-      left: 0;
-      bottom: 0;
-      z-index: 40;
-      transform: translateX(-100%);
-      transition: transform 0.25s ease;
-      box-shadow: var(--shadow-lg);
+    .topnav {
+      overflow-x: auto;
+      scrollbar-width: none;
     }
-    .sidebar.open { transform: translateX(0); }
-    .mobile-toggle { display: flex; }
-    .search-box { width: 180px; }
+    .topnav::-webkit-scrollbar { display: none; }
+    .topnav-item { white-space: nowrap; flex-shrink: 0; }
+    .search-box { width: 200px; }
     .brand-text .sub { display: none; }
     .header-clock { display: none; }
   }
@@ -644,6 +639,8 @@
     .search-box { display: none; }
     .stats-row { gap: 24px; }
     .stat-num { font-size: 22px; }
+    .topnav-item { padding: 10px 10px; font-size: 12px; }
+    .topnav-count { display: none; }
   }
 </style>
 </head>
@@ -651,7 +648,6 @@
 
 <!-- ═══ HEADER ═══ -->
 <header class="header">
-  <button class="mobile-toggle" onclick="toggleSidebar()" aria-label="菜单">☰</button>
   <div class="header-brand">
     <div class="brand-mark">W</div>
     <div class="brand-text">WislicWorld<span class="sub">研究归档</span></div>
@@ -671,45 +667,47 @@
   </div>
 </header>
 
+<!-- ═══ TOP NAV BAR ═══ -->
+<nav class="topnav" id="topnav">
+  <div class="topnav-item active" data-cat="all" onclick="handleNavClick('all', this, event)">
+    <span class="topnav-icon ic-all">▦</span>
+    全部报告
+    <span class="topnav-count" id="cnt-all">0</span>
+    <span class="topnav-arrow">▼</span>
+    <div class="dropdown" id="drop-all"></div>
+  </div>
+  <div class="topnav-item" data-cat="daily" onclick="handleNavClick('daily', this, event)">
+    <span class="topnav-icon ic-daily">D</span>
+    宏观日报
+    <span class="topnav-count" id="cnt-daily">0</span>
+    <span class="topnav-arrow">▼</span>
+    <div class="dropdown" id="drop-daily"></div>
+  </div>
+  <div class="topnav-item" data-cat="flash" onclick="handleNavClick('flash', this, event)">
+    <span class="topnav-icon ic-flash">F</span>
+    盘中速览
+    <span class="topnav-count" id="cnt-flash">0</span>
+    <span class="topnav-arrow">▼</span>
+    <div class="dropdown" id="drop-flash"></div>
+  </div>
+  <div class="topnav-item" data-cat="deep" onclick="handleNavClick('deep', this, event)">
+    <span class="topnav-icon ic-deep">R</span>
+    专题研究
+    <span class="topnav-count" id="cnt-deep">0</span>
+    <span class="topnav-arrow">▼</span>
+    <div class="dropdown" id="drop-deep"></div>
+  </div>
+  <div class="topnav-item" data-cat="other" onclick="handleNavClick('other', this, event)">
+    <span class="topnav-icon ic-other">+</span>
+    其他
+    <span class="topnav-count" id="cnt-other">0</span>
+    <span class="topnav-arrow">▼</span>
+    <div class="dropdown" id="drop-other"></div>
+  </div>
+</nav>
+
 <!-- ═══ MAIN LAYOUT ═══ -->
 <div class="app-layout">
-
-  <!-- Sidebar -->
-  <aside class="sidebar" id="sidebar">
-    <nav class="sidebar-nav">
-      <div class="nav-label">分类导航</div>
-      <div class="nav-item active" data-cat="all" onclick="selectCategory('all', this)">
-        <span class="nav-icon ic-all">▦</span>
-        全部报告
-        <span class="nav-count" id="cnt-all">0</span>
-      </div>
-      <div class="nav-item" data-cat="daily" onclick="selectCategory('daily', this)">
-        <span class="nav-icon ic-daily">D</span>
-        宏观日报
-        <span class="nav-count" id="cnt-daily">0</span>
-      </div>
-      <div class="nav-item" data-cat="flash" onclick="selectCategory('flash', this)">
-        <span class="nav-icon ic-flash">F</span>
-        盘中速览
-        <span class="nav-count" id="cnt-flash">0</span>
-      </div>
-      <div class="nav-item" data-cat="deep" onclick="selectCategory('deep', this)">
-        <span class="nav-icon ic-deep">R</span>
-        专题研究
-        <span class="nav-count" id="cnt-deep">0</span>
-      </div>
-      <div class="nav-item" data-cat="other" onclick="selectCategory('other', this)">
-        <span class="nav-icon ic-other">+</span>
-        其他
-        <span class="nav-count" id="cnt-other">0</span>
-      </div>
-    </nav>
-
-    <div class="nav-label" style="padding: 0 20px; margin-top: 8px;">报告列表</div>
-    <div class="report-list" id="reportList"></div>
-  </aside>
-
-  <!-- Content -->
   <main class="content" id="mainContent">
 
     <!-- Welcome Screen -->
@@ -718,7 +716,7 @@
       <h1>WislicWorld</h1>
       <p class="welcome-sub">
         集中归档与浏览 Claude 生成的 AI 研究报告。<br>
-        从左侧选择报告，或使用搜索快速定位。
+        点击顶部分类标签展开下拉菜单，选择报告阅读。
       </p>
       <div class="stats-row">
         <div class="stat-item">
@@ -842,73 +840,97 @@ function refreshUI() {
     document.getElementById('st-latest').textContent = reports[0].date.slice(5);
   }
 
-  renderList();
+  renderDropdowns();
 }
 
-/* ── Render Report List ── */
-function renderList(searchQuery) {
-  let filtered = activeCat === 'all' ? [...reports] : reports.filter(r => r.category === activeCat);
+/* ── Render Dropdown Menus ── */
+function renderDropdowns(searchQuery) {
+  const cats = ['all', 'daily', 'flash', 'deep', 'other'];
 
-  if (searchQuery) {
-    const q = searchQuery.toLowerCase();
-    filtered = filtered.filter(r =>
-      r.title.toLowerCase().includes(q) ||
-      r.date.includes(q) ||
-      (CATEGORIES[r.category]?.label || '').includes(q)
-    );
-  }
+  cats.forEach(cat => {
+    let filtered = cat === 'all' ? [...reports] : reports.filter(r => r.category === cat);
 
-  // Group by date
-  const groups = {};
-  filtered.forEach(r => {
-    if (!groups[r.date]) groups[r.date] = [];
-    groups[r.date].push(r);
-  });
+    if (searchQuery) {
+      const q = searchQuery.toLowerCase();
+      filtered = filtered.filter(r =>
+        r.title.toLowerCase().includes(q) ||
+        r.date.includes(q) ||
+        (CATEGORIES[r.category]?.label || '').includes(q)
+      );
+    }
 
-  const container = document.getElementById('reportList');
-  container.innerHTML = '';
-
-  const dates = Object.keys(groups).sort().reverse();
-
-  if (dates.length === 0) {
-    container.innerHTML = `<div style="padding:24px 16px;text-align:center;color:var(--text-tertiary);font-size:12px;">暂无匹配报告</div>`;
-    return;
-  }
-
-  dates.forEach(date => {
-    const grp = document.createElement('div');
-    grp.className = 'date-group';
-
-    const lbl = document.createElement('div');
-    lbl.className = 'date-label';
-    lbl.textContent = date;
-    grp.appendChild(lbl);
-
-    groups[date].forEach(report => {
-      const item = document.createElement('div');
-      item.className = 'report-item' + (activeFile === report.file ? ' active' : '');
-      const cat = CATEGORIES[report.category] || CATEGORIES.other;
-      item.innerHTML = `<span class="report-tag ${cat.tagClass}">${cat.label}</span><span class="report-title">${report.title}</span>`;
-      item.onclick = () => openReport(report);
-      grp.appendChild(item);
+    // Group by date
+    const groups = {};
+    filtered.forEach(r => {
+      if (!groups[r.date]) groups[r.date] = [];
+      groups[r.date].push(r);
     });
 
-    container.appendChild(grp);
+    const container = document.getElementById('drop-' + cat);
+    container.innerHTML = '';
+
+    const dates = Object.keys(groups).sort().reverse();
+
+    if (dates.length === 0) {
+      container.innerHTML = '<div class="dropdown-empty">暂无匹配报告</div>';
+      return;
+    }
+
+    dates.forEach(date => {
+      const lbl = document.createElement('div');
+      lbl.className = 'dropdown-date';
+      lbl.textContent = date;
+      container.appendChild(lbl);
+
+      groups[date].forEach(report => {
+        const item = document.createElement('div');
+        item.className = 'dropdown-item' + (activeFile === report.file ? ' active' : '');
+        const catInfo = CATEGORIES[report.category] || CATEGORIES.other;
+        item.innerHTML = `<span class="dropdown-tag ${catInfo.tagClass}">${catInfo.label}</span><span class="dropdown-title">${report.title}</span>`;
+        item.onclick = (e) => {
+          e.stopPropagation();
+          openReport(report);
+        };
+        container.appendChild(item);
+      });
+    });
   });
 }
 
-/* ── Category Select ── */
-function selectCategory(cat, el) {
+/* ── Nav Click — toggle dropdown ── */
+function handleNavClick(cat, el, event) {
+  // Prevent click from propagating to document (which closes dropdowns)
+  event.stopPropagation();
+
+  const wasOpen = el.classList.contains('open');
+
+  // Close all dropdowns
+  document.querySelectorAll('.topnav-item').forEach(n => n.classList.remove('open'));
+
+  // Set active category
   activeCat = cat;
-  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  document.querySelectorAll('.topnav-item').forEach(n => n.classList.remove('active'));
   el.classList.add('active');
-  document.getElementById('searchInput').value = '';
-  renderList();
+
+  // Toggle dropdown
+  if (!wasOpen) {
+    el.classList.add('open');
+  }
+
+  // Re-render dropdowns with current search
+  renderDropdowns(document.getElementById('searchInput').value);
 }
+
+/* ── Close dropdowns on outside click ── */
+document.addEventListener('click', (e) => {
+  if (!e.target.closest('.topnav-item')) {
+    document.querySelectorAll('.topnav-item').forEach(n => n.classList.remove('open'));
+  }
+});
 
 /* ── Search ── */
 function handleSearch(val) {
-  renderList(val);
+  renderDropdowns(val);
 }
 
 /* ── Open Report ── */
@@ -924,10 +946,10 @@ function openReport(report) {
   document.getElementById('bc-title').textContent = report.title;
   document.getElementById('viewerFrame').src = report.file;
 
-  renderList(document.getElementById('searchInput').value);
+  // Close all dropdowns
+  document.querySelectorAll('.topnav-item').forEach(n => n.classList.remove('open'));
 
-  // Close sidebar on mobile
-  document.getElementById('sidebar').classList.remove('open');
+  renderDropdowns(document.getElementById('searchInput').value);
 }
 
 /* ── Open New Tab ── */
@@ -941,12 +963,7 @@ function closeViewer() {
   document.getElementById('viewer').style.display = 'none';
   document.getElementById('welcomeScreen').style.display = 'flex';
   document.getElementById('viewerFrame').src = '';
-  renderList();
-}
-
-/* ── Mobile Sidebar ── */
-function toggleSidebar() {
-  document.getElementById('sidebar').classList.toggle('open');
+  renderDropdowns();
 }
 
 /* ── Clock ── */
@@ -965,8 +982,8 @@ document.addEventListener('keydown', e => {
   }
   if (e.key === 'Escape') {
     document.getElementById('searchInput').blur();
+    document.querySelectorAll('.topnav-item').forEach(n => n.classList.remove('open'));
     if (activeFile) closeViewer();
-    document.getElementById('sidebar').classList.remove('open');
   }
 });
 
