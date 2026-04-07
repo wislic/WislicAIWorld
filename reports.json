@@ -1,52 +1,70 @@
 {
   "reports": [
     {
-      "title": "宏观日报 2026-03-29",
+      "title": "宏观经济与大类资产日报 2026-03-27",
       "category": "daily",
-      "date": "2026-03-29",
-      "file": "reports/daily/2026-03-29.html"
+      "date": "2026-03-27",
+      "file": "reports/daily/2026-03-27.html"
     },
     {
-      "title": "宏观日报 2026-03-28",
-      "category": "daily",
-      "date": "2026-03-28",
-      "file": "reports/daily/2026-03-28.html"
-    },
-    {
-      "title": "盘中速览 2026-03-29",
-      "category": "flash",
-      "date": "2026-03-29",
-      "file": "reports/flash/2026-03-29.html"
-    },
-    {
-      "title": "盘中速览 2026-03-28",
+      "title": "AI投研团队实战研判 2026-03-28",
       "category": "flash",
       "date": "2026-03-28",
-      "file": "reports/flash/2026-03-28.html"
+      "file": "reports/flash/tactical-20260328.html"
     },
     {
-      "title": "美伊冲突资本市场影响",
+      "title": "五层嵌套技术分析 · A股核心指数",
       "category": "deep",
-      "date": "2026-03-25",
-      "file": "reports/deep/us-iran-2026.html"
+      "date": "2026-03-31",
+      "file": "reports/deep/a-share-technical-analysis.html"
+    },
+    {
+      "title": "曼德博分形市场理论 × 五层嵌套框架",
+      "category": "deep",
+      "date": "2026-03-31",
+      "file": "reports/deep/fractal-market-theory.html"
     },
     {
       "title": "AI黄金投研团队 V2.0 全流程研判仪表盘",
       "category": "deep",
       "date": "2026-03-29",
       "file": "reports/deep/gold-research-v2.html"
-    }
+    },
     {
-      "title": "滞胀环境资产配置框架",
+      "title": "碳酸锂期货技术分析与走势预判",
       "category": "deep",
-      "date": "2026-03-20",
-      "file": "reports/deep/stagflation-framework.html"
-    }
+      "date": "2026-03-31",
+      "file": "reports/deep/lithium-carbonate-20260331.html"
+    },
     {
-    "title": "宏观经济与大类资产周报 W13 (2026.03.24-03.28)",
-    "category": "other",
-    "date": "2026-03-29",
-    "file": "reports/other/weekly-macro-W13-2026.html"
+      "title": "中国央行货币政策取向演变分析 2026Q1",
+      "category": "deep",
+      "date": "2026-03-31",
+      "file": "reports/deep/monetary-policy-2026q1.html"
+    },
+    {
+      "title": "油价-通胀-基本面关系验证",
+      "category": "deep",
+      "date": "2026-03-31",
+      "file": "reports/deep/oil-inflation-fundamentals.html"
+    },
+    {
+      "title": "《趋势交易法》核心逻辑与框架整合",
+      "category": "deep",
+      "date": "2026-03-31",
+      "file": "reports/deep/trend-trading-framework.html"
+    },
+    {
+      "title": "杨康平 · 核心观点与监控指标体系",
+      "category": "deep",
+      "date": "2026-03-31",
+      "file": "reports/deep/ykp-views-indicators.html"
+    },
+    {
+      "title": "宏观经济与大类资产周报 W13 (2026.03.24-03.28)",
+      "category": "other",
+      "date": "2026-03-29",
+      "file": "reports/other/weekly-macro-W13-2026.html"
     }
   ]
 }
